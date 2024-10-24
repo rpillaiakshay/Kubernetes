@@ -1,0 +1,34 @@
+#For nginx
+vim dockerfile 
+   FROM nginx:latest
+COPY spering-html /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+~                                                                                                                                                 
+~                                       
+
+ docker build -t nginx1:latest .
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+docker tag nginx1:latest localhost:5000/nginx1:latest
+docker push localhost:5000/nginx1:latest
+ docker images
+kubectl run hosting12 --image=localhost:5000/nginx1
+kubectl expose pod hosting12 --type=NodePort --port=8080 --target-port=80
+kubectl get service hosting12
+ minikube service hosting12
+
+
+#for httpd
+
+FROM httpd:latest
+COPY spering-html/ /usr/local/apache2/htdocs/
+EXPOSE 80
+docker build -f Dockerfile1 -t httpd1:latest .
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+docker tag httpd1:latest localhost:5000/httpd1:latest
+docker push localhost:5000/httpd1:latest
+kubectl run hosting123 --image=localhost:5000/httpd1:latest
+kubectl expose pod hosting123 --type=NodePort --port=8080 --target-port=80
+kubectl get services hosting123
+minikube service hosting123
+

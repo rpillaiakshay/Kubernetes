@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu-pod
+  labels:
+    app: ubuntu-app
+spec:
+  containers:
+  - name: ubuntu-container
+    image: ubuntu:latest
+    ports:
+    - containerPort: 80
+    command: [ "sleep", "3600" ]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubuntu-service
+spec:
+  type: NodePort
+  selector:
+    app: ubuntu-app
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 80
+    nodePort: 30012
